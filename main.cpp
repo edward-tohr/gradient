@@ -5,12 +5,15 @@
 #include <string>
 #include <cmath>
 #include <iomanip>
+#include <fstream>
 int main(int argc, char* argv[]){
     char msgArray[256];
     bool DEBUG = false;
     int red1, green1, blue1, red2, green2, blue2;
     int numSteps = 10;
     std::string color1, color2, strSteps, message;
+    std::fstream file;
+    file.open("output.txt",std::fstream::in|std::fstream::out|std::fstream::trunc);
 
     if (argc > 1) {
             DEBUG = true;
@@ -63,7 +66,7 @@ if( !DEBUG){
   double stepBlue = deltaBlue / numSteps;
 
   double msgStep = (double)message.length() / (double)numSteps;
-  std::cout << "Message length : " << message.length() << " and numSteps " << numSteps << "give msgStep of " << msgStep << std::endl;
+  //std::cout << "Message length : " << message.length() << " and numSteps " << numSteps << "give msgStep of " << msgStep << std::endl;
   if (numSteps > message.length()){
         numSteps = message.length();
         msgStep = 1;
@@ -74,6 +77,8 @@ if( !DEBUG){
 
   std::string msgOut;
   std::cout << std::resetiosflags(std::ios_base::dec) << std::setiosflags(std::ios_base::hex|std::ios_base::uppercase|std::ios_base::right) << std::setfill('0') << std::setw(3);
+  file << std::resetiosflags(std::ios_base::dec) << std::setiosflags(std::ios_base::hex|std::ios_base::uppercase|std::ios_base::right) << std::setfill('0') << std::setw(3);
+
   int prevstep = 0;
   int previdx = 0;
 
@@ -83,12 +88,20 @@ if( !DEBUG){
   //std::cout << "msgOut is: " << msgOut << ". floor(curMsg) is " << std::floor(curMsg) << " and msgStep is " << msgStep << std::endl;
   //std::cout << red1 << green1 << blue1 << std::endl;
   std::cout << "%^#";// << std::uppercase << std::hex << red1 << std::uppercase << std::hex << green1 << std::uppercase << std::hex << blue1 << "%^";
+  file << "%^#";
   std::cout << std::setw(2) << red1;
+  file << std::setw(2) << red1;
   std::cout << std::setw(2) << green1;
+  file << std::setw(2) << green1;
   std::cout << std::setw(2) << blue1;
+  file << std::setw(2) << blue1;
   std::cout << "%^";
+  file << "%^";
   std::cout << msgOut;
+  file << msgOut;
+
   std::cout << "%^RESET%^";
+  file << "%^RESET%^";
   if (DEBUG){
         //std::cout << "  curMsg: " << curMsg << " curInt: "<< curInt << " " <<  std::max(std::floor(curMsg)-curInt,std::floor(1)) << std::endl;
   }
@@ -106,12 +119,20 @@ if( !DEBUG){
   }
   msgOut = message.substr(previdx, message.length() - previdx);
   std::cout << "%^#";
+  file << "%^#";
   std::cout << std::setw(2) << red2;
+  file << std::setw(2) << red2;
   std::cout << std::setw(2) << green2;
+  file << std::setw(2) << green2;
   std::cout << std::setw(2) << blue2;
+  file << std::setw(2) << blue2;
   std::cout << "%^";
+  file << "%^";
   std::cout << msgOut;
+  file << msgOut;
   std::cout << "%^RESET%^";
+  file << "%^RESET%^";
+  file.close();
 
 
    return 0;
